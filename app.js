@@ -7,14 +7,14 @@ const { json } = require("body-parser");
 
 const app = express();
 
-app.get("/signup.html", function (req, res) {
+app.get("/", function (req, res) {
   res.sendFile(__dirname + "/signup.html");
 });
 
 app.use(express.static("public"));
 app.use(bodyparser.urlencoded({ extended: true }));
 
-app.post("/signup.html", (req, res) => {
+app.post("/", (req, res) => {
   console.log(req.body);
   var firstName = req.body.firstName;
   var lastName = req.body.lastName;
@@ -65,13 +65,13 @@ app.post("/signup.html", (req, res) => {
 });
 
   app.post("/failure", (req, res) => {
-    res.redirect("/signup.html");
+    res.redirect("/");
   })
 
 //list id:f95ebea4ab
 // root url:https://<dc>.api.mailchimp.com/3.0/
 //api key: 68e07b689f8144fdc99987c5c5398ca4-us17
 
-app.listen(3000, function () {
+app.listen(process.env.PORT || 3000, function () {
   console.log("server is running on port 3000");
 });
