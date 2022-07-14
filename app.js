@@ -2,13 +2,14 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const request = require("request");
 const https = require("node:https");
-const mailchimpData = require(__dirname + "/mailchimpdata.js");
+require("dotenv").config();
 
 const app = express();
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/signup.html");
 });
+
 
 app.use(express.static("public"));
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -35,19 +36,19 @@ app.post("/", (req, res) => {
 
   let jsondata = JSON.stringify(data);
 
-  let listid = mailchimpData.mailchimpListId[0];
+  let listid = process.env.MailchimpIdList;
 
   let url = "https://us17.api.mailchimp.com/3.0/" + "lists/" + listid;
 
   let options = {
     method: "POST",
-    auth: "sijia:" + mailchimpData.mailchimpKey
+    auth: "sijia:" + process.env.MailchimpApiKey
   };
 
   let request = https.request(url, options, (respond) => {
     respond.on("data", (data) => {
       const feedback = JSON.parse(data);
-      console.log(feedback);
+      // console.log(feedback);
 
       if (respond.statusCode === 200) {
         res.sendFile(__dirname + "/success.html");
